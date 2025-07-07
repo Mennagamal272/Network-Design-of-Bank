@@ -1,5 +1,3 @@
-# Network-Design-of-Bank
-
 # 🏦 Bank Network Design – 4 Floors (VLAN-Based Architecture)
 
 ## 📘 Project Overview
