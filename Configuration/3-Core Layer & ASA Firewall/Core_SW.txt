@@ -1,0 +1,38 @@
+! Port-Channel 12 to MLS1 (e0/0-1)
+
+interface range Ethernet0/0-1
+ no switchport
+ channel-group 12 mode active
+ no shutdown
+interface Port-channel12
+ no switchport
+ ip address 10.0.1.2 255.255.255.252
+ no shutdown
+
+! Port-Channel 13 to MLS2 (e0/2-3)
+
+interface range Ethernet0/2-3
+ no switchport
+ channel-group 13 mode active
+ no shutdown
+interface Port-channel13
+ no switchport
+ ip address 10.0.2.2 255.255.255.252
+ no shutdown
+
+! Interface to Core Router (e1/1)
+
+interface Ethernet1/1
+ no switchport
+ ip address 10.0.0.2 255.255.255.0
+ no shutdown
+
+! OSPF Configuration
+
+router ospf 1
+ network 10.0.0.0 0.0.0.255 area 0
+ network 10.0.1.0 0.0.0.3 area 0
+ network 10.0.2.0 0.0.0.3 area 0
+ 
+exit
+

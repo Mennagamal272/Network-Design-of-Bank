@@ -1,0 +1,31 @@
+vlan 40
+name FLOOR-4
+exit
+interface range e0/0-3
+spanning-tree portfast
+spanning-tree bpduguard enable
+switchport mode access
+switchport access vlan 40
+switchport port-security
+switchport port-security maximum 2
+switchport port-security violation restrict
+switchport port-security mac-address sticky
+exit
+interface range e1/0-3
+spanning-tree portfast
+spanning-tree bpduguard enable
+switchport mode access
+switchport access vlan 40
+switchport port-security
+switchport port-security maximum 2
+switchport port-security violation restrict
+switchport port-security mac-address sticky
+exit
+
+interface range e2/0-1
+switchport mode trunk
+switchport trunk encapsulation dot1q
+switchport trunk allowed vlan 40
+exit
+
+

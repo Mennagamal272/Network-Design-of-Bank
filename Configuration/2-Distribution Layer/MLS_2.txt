@@ -1,0 +1,81 @@
+! VLAN Configuration
+vlan 10
+ name FLOOR-1
+vlan 20
+ name FLOOR-2
+vlan 30
+ name FLOOR-3
+vlan 40
+ name FLOOR-4
+exit
+
+! VLAN Interfaces with HSRP Redundancy
+interface Vlan10
+ip helper-address 10.0.0.1
+ ip address 10.0.10.4 255.255.255.0
+ standby 10 ip 10.0.10.1
+ standby 10 priority 100
+ standby 10 preempt
+ no shutdown
+interface Vlan20
+ip helper-address 10.0.0.1
+ ip address 10.0.20.4 255.255.255.0
+ standby 20 ip 10.0.20.1
+ standby 20 priority 100
+ standby 20 preempt
+ no shutdown
+interface Vlan30
+ip helper-address 10.0.0.1
+ ip address 10.0.30.4 255.255.255.0
+ standby 30 ip 10.0.30.1
+ standby 30 priority 100
+ standby 30 preempt
+ no shutdown
+interface Vlan40
+ip helper-address 10.0.0.1
+ ip address 10.0.40.4 255.255.255.0
+ standby 40 ip 10.0.40.1
+ standby 40 priority 100
+ standby 40 preempt
+ no shutdown
+
+! Trunk Ports to Access Switches (e0/0-3)
+interface range Ethernet0/0-3
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30,40
+ no shutdown
+
+! Port-Channel 14 to MLS1 (e1/0-3)
+interface range Ethernet1/0-3
+ channel-group 14 mode active
+ no shutdown
+interface Port-channel14
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30,40
+ no shutdown
+
+! Port-Channel 13 to Core Switch (e2/0-1)
+interface range Ethernet2/0-1
+ no switchport
+ channel-group 13 mode active
+ no shutdown
+interface Port-channel13
+ no switchport
+ ip address 10.0.2.1 255.255.255.252
+ no shutdown
+
+! OSPF Configuration
+router ospf 1
+ network 10.0.10.0 0.0.0.255 area 0
+ network 10.0.20.0 0.0.0.255 area 0
+ network 10.0.30.0 0.0.0.255 area 0
+ network 10.0.40.0 0.0.0.255 area 0
+ network 10.0.2.0 0.0.0.3 area 0
+ passive-interface Vlan10
+ passive-interface Vlan20
+ passive-interface Vlan30
+ passive-interface Vlan40
+exit
+

@@ -1,0 +1,54 @@
+ASA Firewall Configuration
+
+! Configure interfaces
+interface GigabitEthernet0/1
+nameif inside
+security-level 100
+ip address 10.0.100.2 255.255.255.252  
+no shutdown
+exit
+
+interface GigabitEthernet0/0
+nameif outside
+security-level 0
+ip address 203.0.113.1 255.255.255.252  
+no shutdown
+exit
+
+
+route outside 0.0.0.0 0.0.0.0 203.0.113.2
+route inside 10.0.0.0 255.255.0.0 10.0.100.1
+
+object network internal-subnet
+ subnet 10.0.0.0 255.255.0.0
+ nat (inside,outside) dynamic interface
+exit
+
+access-list NO_NAT_TO_ASA extended permit icmp 10.0.0.0 255.255.0.0 host 203.0.113.1  
+nat (inside) 0 access-list NO_NAT_TO_ASA
+access-list OUTSIDE_IN extended permit icmp any host 203.0.113.1 echo-reply
+access-list OUTSIDE_IN extended permit icmp any host 203.0.113.1 echo  
+access-list OUTSIDE_IN extended permit icmp any any time-exceeded  
+access-list OUTSIDE_IN extended permit icmp any any unreachable
+access-list OUTSIDE_IN extended permit icmp any 10.0.0.0 255.255.0.0 echo-reply 
+access-group OUTSIDE_IN in interface outside  
+access-list INSIDE_IN extended permit icmp 10.0.0.0 255.255.0.0 host 203.0.113.1 echo
+access-list INSIDE_IN extended permit icmp any host 203.0.113.1 echo-reply
+access-list INSIDE_IN extended permit udp any any eq 53
+access-list INSIDE_IN extended permit tcp any any eq 443
+access-group INSIDE_IN in interface inside
+access-list INSIDE_IN extended permit icmp 10.0.0.0 255.255.0.0 any echo
+access-list OUTSIDE_IN extended deny ip any any log
+
+policy-map global_policy
+ class inspection_default
+  inspect icmp
+exit
+
+management-access inside
+icmp permit any inside   
+icmp permit any outside
+icmp permit 10.0.0.0 255.255.0.0 outside
+access-list control-plane-acl extended permit icmp 10.0.0.0 255.255.0.0 host 203.0.113.1 echo
+class-map control-plane-class
+ match access-list control-plane-acl
