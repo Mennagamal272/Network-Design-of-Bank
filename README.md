@@ -1,14 +1,15 @@
 # Network-Design-of-Bank
+
 # 🏦 Bank Network Design – 4 Floors (VLAN-Based Architecture)
 
 ## 📘 Project Overview
 
 This project presents a secure and scalable network infrastructure for a multi-floor bank, based on the **Three-Layer Hierarchical Model** (Access – Distribution – Core). Each floor is segmented using VLANs to enhance traffic isolation and security.
 
-- VLAN 10 – Public Services (Floor 1)  
-- VLAN 20 – Employees (Floor 2)  
-- VLAN 30 – Server Room (Floor 3)  
-- VLAN 40 – Management & Vault (Floor 4)
+- **VLAN 10** – Public Services (Floor 1)  
+- **VLAN 20** – Employees (Floor 2)  
+- **VLAN 30** – Server Room (Floor 3)  
+- **VLAN 40** – Management & Vault (Floor 4)
 
 ---
 
@@ -45,14 +46,10 @@ This project presents a secure and scalable network infrastructure for a multi-f
 
 ## 📂 Included Files
 
-- Network topology (.gns3 or .pkt)  
+- Network topology (.gns3 )  
 - Device configurations  
 - Network diagrams  
 - Documentation (README)
 
 ---
-
-## 🧑‍💻 Developed By
-
-*Your Name*  
-*Project Title or Course Name (if applicable)*  
+ 
